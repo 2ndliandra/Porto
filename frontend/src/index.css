@@ -1,0 +1,274 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --color-primary: #0f172a;
+  --color-primary-light: #1e3a8a;
+  --color-secondary: #020617;
+  --color-text: #e5e7eb;
+  --color-text-muted: #9ca3af;
+
+  --animate-fade-in: fadeIn 0.5s ease-out forwards;
+  --animate-fade-in-up: fadeInUp 0.8s ease-out forwards;
+
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
+    }
+
+    100% {
+      opacity: 1;
+    }
+  }
+
+  @keyframes fadeInUp {
+    0% {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   PREMIUM DARK BACKGROUND SYSTEM
+   Multi-layered gradient + radial glow + noise dithering
+   ══════════════════════════════════════════════════════════════ */
+
+@layer base {
+  body {
+    font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    min-height: 100vh;
+    color: var(--color-text);
+
+    /* Anti-Copy Measures */
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+  }
+
+  /* Prevent Image Dragging */
+  img {
+    -webkit-user-drag: none;
+    pointer-events: none;
+  }
+
+  /* Blackout screen on print attempt */
+  @media print {
+    html {
+      display: none !important;
+    }
+  }
+
+  /* ── DARK MODE: Premium layered background ── */
+  html.dark body {
+    background-color: #020617;
+    background-image:
+      /* Layer 1: Subtle top-left radial glow (blue ambient) */
+      radial-gradient(
+        ellipse 80% 60% at 10% 0%,
+        rgba(59, 130, 246, 0.07) 0%,
+        transparent 60%
+      ),
+      /* Layer 2: Top-right corner radial glow (cyan ambient) */
+      radial-gradient(
+        ellipse 60% 50% at 90% 5%,
+        rgba(6, 182, 212, 0.05) 0%,
+        transparent 50%
+      ),
+      /* Layer 3: Center radial depth (indigo vignette) */
+      radial-gradient(
+        ellipse 120% 80% at 50% 40%,
+        rgba(99, 102, 241, 0.04) 0%,
+        transparent 70%
+      ),
+      /* Layer 4: Bottom ambient warmth (purple haze) */
+      radial-gradient(
+        ellipse 80% 50% at 30% 100%,
+        rgba(139, 92, 246, 0.05) 0%,
+        transparent 60%
+      ),
+      /* Layer 5: Multi-stop base gradient (3 color stops) */
+      linear-gradient(
+        165deg,
+        #020617 0%,
+        #0a0f1f 25%,
+        #0f172a 50%,
+        #0a1628 75%,
+        #020617 100%
+      );
+    background-attachment: fixed;
+    background-size: 100% 100%;
+  }
+
+  /* ── LIGHT MODE: Premium soft gradient ── */
+  html:not(.dark) body {
+    background-color: #f8fafc;
+    background-image:
+      radial-gradient(
+        ellipse 80% 50% at 20% 0%,
+        rgba(99, 102, 241, 0.06) 0%,
+        transparent 50%
+      ),
+      radial-gradient(
+        ellipse 60% 40% at 80% 10%,
+        rgba(6, 182, 212, 0.05) 0%,
+        transparent 50%
+      ),
+      radial-gradient(
+        ellipse 100% 60% at 50% 100%,
+        rgba(139, 92, 246, 0.04) 0%,
+        transparent 50%
+      ),
+      linear-gradient(
+        165deg,
+        #f8fafc 0%,
+        #f1f5f9 35%,
+        #e2e8f0 65%,
+        #f1f5f9 100%
+      );
+    color: #1e293b;
+    background-attachment: fixed;
+    background-size: 100% 100%;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   NOISE TEXTURE OVERLAY (Anti-banding dithering)
+   Uses a pseudo-element with CSS-generated grain
+   ══════════════════════════════════════════════════════════════ */
+
+html.dark body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 256px 256px;
+}
+
+/* Ensure all content sits above the noise layer */
+html.dark body > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   CUSTOM CURSOR (desktop only)
+   ══════════════════════════════════════════════════════════════ */
+
+@media (min-width: 768px) {
+  * {
+    cursor: none !important;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   GLASSMORPHISM UTILITIES
+   Enhanced depth, blur, and border treatment
+   ══════════════════════════════════════════════════════════════ */
+
+@layer utilities {
+
+  /* ── Dark mode glass ── */
+  .glass {
+    background-color: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(16px) saturate(1.4);
+    -webkit-backdrop-filter: blur(16px) saturate(1.4);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    box-shadow:
+      0 8px 32px rgba(0, 0, 0, 0.2),
+      inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  }
+
+  /* ── Light mode glass ── */
+  html:not(.dark) .glass {
+    background-color: rgba(255, 255, 255, 0.65);
+    backdrop-filter: blur(16px) saturate(1.3);
+    -webkit-backdrop-filter: blur(16px) saturate(1.3);
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    box-shadow:
+      0 4px 16px rgba(0, 0, 0, 0.04),
+      inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  }
+
+  /* ── Hover interaction ── */
+  .glass-hover {
+    transition: all 400ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .glass-hover:hover {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.12);
+    box-shadow:
+      0 12px 40px rgba(0, 0, 0, 0.3),
+      inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    transform: translateY(-1px);
+  }
+
+  html:not(.dark) .glass-hover:hover {
+    background-color: rgba(255, 255, 255, 0.9);
+    border-color: rgba(0, 0, 0, 0.1);
+    box-shadow:
+      0 12px 30px rgba(0, 0, 0, 0.08),
+      inset 0 1px 0 rgba(255, 255, 255, 1);
+    transform: translateY(-1px);
+  }
+
+  /* ══════════════════════════════════════════════════════════════
+     GRADIENT TEXT ANIMATION
+     ══════════════════════════════════════════════════════════════ */
+
+  @keyframes gradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  .animate-gradient {
+    background-size: 200% auto;
+    animation: gradient 6s linear infinite;
+  }
+
+  /* ══════════════════════════════════════════════════════════════
+     AMBIENT GLOW (Slow floating light effect)
+     Applied via utility class on a dedicated overlay div
+     ══════════════════════════════════════════════════════════════ */
+
+  @keyframes ambientFloat {
+    0%, 100% {
+      transform: translate(0, 0) scale(1);
+      opacity: 0.5;
+    }
+    33% {
+      transform: translate(30px, -20px) scale(1.05);
+      opacity: 0.7;
+    }
+    66% {
+      transform: translate(-20px, 15px) scale(0.95);
+      opacity: 0.4;
+    }
+  }
+
+  .ambient-glow {
+    animation: ambientFloat 20s ease-in-out infinite;
+    will-change: transform, opacity;
+  }
+
+  .ambient-glow-delayed {
+    animation: ambientFloat 25s ease-in-out infinite;
+    animation-delay: -8s;
+    will-change: transform, opacity;
+  }
+}
