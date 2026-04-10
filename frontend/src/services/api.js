@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://localhost:5000/api', // Match backend port
+  baseURL: '/api', // Match backend port
 });
 
 export const getProjects = () => api.get('/projects');
@@ -67,7 +67,7 @@ export const uploadImage = (formData) => api.post('/upload', formData, {
 export const getImageUrl = (path) => {
   if (!path) return '';
   if (path.startsWith('http://') || path.startsWith('https://')) return path;
-  if (path.startsWith('/uploads')) return `http://localhost:5000${path}`;
+  if (path.startsWith('/uploads')) return `${window.location.origin}${path}`;
   return path;
 };
 export default api;
