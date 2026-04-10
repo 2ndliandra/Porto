@@ -66,8 +66,12 @@ export const uploadImage = (formData) => api.post('/upload', formData, {
 
 export const getImageUrl = (path) => {
   if (!path) return '';
+  // If it's already an absolute web URL, return it
   if (path.startsWith('http://') || path.startsWith('https://')) return path;
-  if (path.startsWith('/uploads')) return `${window.location.origin}${path}`;
+  
+  // If it's an uploaded file path (starts with /uploads), just return the path.
+  // In development, Vite will proxy /uploads. In production, Nginx will handle /uploads.
+  if (path.startsWith('/uploads')) return path; 
   return path;
 };
 export default api;

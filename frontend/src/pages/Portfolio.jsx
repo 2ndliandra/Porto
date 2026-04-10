@@ -105,7 +105,7 @@ const Portfolio = () => {
           </p>
         </div>
         <div className="relative z-10 space-y-6">
-          {academics.length > 0 ? academics.map((academic, index) => (
+          {Array.isArray(academics) && academics.length > 0 ? academics.map((academic, index) => (
             <motion.div
               key={academic._id}
               variants={itemVariants}
@@ -150,7 +150,7 @@ const Portfolio = () => {
           </p>
         </div>
         <div className="relative z-10 space-y-6">
-          {internships.length > 0 ? internships.map((internship) => (
+          {Array.isArray(internships) && internships.length > 0 ? internships.map((internship) => (
             <motion.div
               key={internship._id}
               variants={itemVariants}
@@ -195,7 +195,7 @@ const Portfolio = () => {
           </p>
         </div>
         <div className="relative z-10 space-y-6">
-          {organizations.length > 0 ? organizations.map((org) => (
+          {Array.isArray(organizations) && organizations.length > 0 ? organizations.map((org) => (
             <motion.div
               key={org._id}
               variants={itemVariants}
@@ -240,7 +240,7 @@ const Portfolio = () => {
           </p>
         </div>
         <motion.div variants={staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} className="grid grid-cols-2 md:grid-cols-4 gap-6">
-          {skills.length > 0 ? skills.map((skill) => (
+          {Array.isArray(skills) && skills.length > 0 ? skills.map((skill) => (
             <SkillCard 
               key={skill._id}
               skill={skill}
@@ -268,7 +268,7 @@ const Portfolio = () => {
           </p>
         </div>
         <motion.div variants={staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} className="grid grid-cols-2 md:grid-cols-4 gap-6">
-          {softSkills.length > 0 ? softSkills.map((skill) => (
+          {Array.isArray(softSkills) && softSkills.length > 0 ? softSkills.map((skill) => (
             <SkillCard 
               key={skill._id}
               skill={skill}
@@ -295,7 +295,7 @@ const Portfolio = () => {
           </p>
         </div>
         <motion.div variants={staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {projects.length > 0 ? projects.map(project => (
+          {Array.isArray(projects) && projects.length > 0 ? projects.map(project => (
             <motion.div variants={itemVariants} whileHover={{ y: -10 }} key={project._id} className="glass p-4 rounded-[2.5rem] glass-hover flex flex-col group border border-slate-200 hover:border-purple-300 dark:border-white/5 dark:hover:border-white/20 transition-all duration-500 shadow-xl hover:shadow-purple-500/10">
 
               {/* Depth Layer 1: Nested Image Frame */}
@@ -357,7 +357,7 @@ const Portfolio = () => {
           </p>
         </div>
         <motion.div variants={staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} className="space-y-12 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-1 before:bg-gradient-to-b before:from-transparent before:via-purple-500/30 before:to-transparent z-10">
-          {experiences.length > 0 ? experiences.map((exp, index) => (
+          {Array.isArray(experiences) && experiences.length > 0 ? experiences.map((exp, index) => (
             <motion.div variants={itemVariants} key={exp._id || index} className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
               <div className="flex items-center justify-center w-12 h-12 rounded-full border-2 border-slate-300 dark:border-white/20 bg-white dark:bg-[#0b1120] text-blue-500 dark:text-blue-400 shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 group-hover:border-purple-500 group-hover:text-purple-600 dark:group-hover:text-purple-400 group-hover:scale-110 group-hover:shadow-[0_0_15px_rgba(168,85,247,0.3)] dark:group-hover:shadow-[0_0_15px_rgba(168,85,247,0.5)] transition-all duration-300 z-10">
                 <Clock size={20} />
@@ -393,7 +393,7 @@ const Portfolio = () => {
         </div>
 
         <motion.div variants={staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 relative z-10">
-          {learnings.length > 0 ? learnings.map((learning) => {
+          {Array.isArray(learnings) && learnings.length > 0 ? learnings.map((learning) => {
             const IconComponent = LucideIcons[learning.iconName] || BookOpen;
             return (
               <motion.div key={learning._id} variants={itemVariants} className="glass p-6 md:p-8 rounded-3xl glass-hover min-h-[220px] flex flex-col justify-between border border-slate-200 dark:border-white/5 hover:border-slate-300 dark:hover:border-white/10 group overflow-hidden relative">
@@ -442,7 +442,7 @@ const Portfolio = () => {
             I'm currently looking for new opportunities. Whether you have a question or just want to say hi, I'll try my best to get back to you!
           </p>
           <div className="flex flex-wrap justify-center gap-4 relative z-10">
-            {contacts.length > 0 ? (
+            {Array.isArray(contacts) && contacts.length > 0 ? (
               <>
                 {contacts[0].email && (
                   <motion.a whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} href={`mailto:${contacts[0].email}`} className="flex items-center gap-3 bg-white hover:bg-slate-50 dark:bg-white/5 dark:hover:bg-white/10 border border-slate-200 dark:border-white/10 px-6 py-4 rounded-xl transition-colors shadow-lg dark:shadow-xl">
