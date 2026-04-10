@@ -47,25 +47,6 @@
     -moz-osx-font-smoothing: grayscale;
     min-height: 100vh;
     color: var(--color-text);
-
-    /* Anti-Copy Measures */
-    user-select: none;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-  }
-
-  /* Prevent Image Dragging */
-  img {
-    -webkit-user-drag: none;
-    pointer-events: none;
-  }
-
-  /* Blackout screen on print attempt */
-  @media print {
-    html {
-      display: none !important;
-    }
   }
 
   /* ── DARK MODE: Premium layered background ── */

@@ -1,59 +1,10 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { useEffect } from 'react';
 import Navbar from './components/Navbar';
 import Portfolio from './pages/Portfolio';
 import Admin from './pages/Admin';
 import Cursor from './components/Cursor';
 
 function App() {
-  useEffect(() => {
-    // Anti-Screenshot & Anti-Copy System
-    const handleKeyDown = (e) => {
-      // Prevent PrintScreen key
-      if (e.key === 'PrintScreen') {
-        e.preventDefault();
-        navigator.clipboard.writeText(''); // Clear clipboard attempting to take snap
-        alert('Screenshots are disabled on this portfolio.');
-      }
-
-      // Prevent common OS-level shortcut combos:
-      // Mac: Cmd + Shift + 4, Cmd + Shift + 3, Cmd + Shift + 5
-      // Win: Windows + Shift + S
-      if ((e.metaKey || e.ctrlKey) && e.shiftKey && (e.key === '3' || e.key === '4' || e.key === '5' || e.key.toLowerCase() === 's')) {
-        e.preventDefault();
-        alert('Screenshots are disabled on this portfolio.');
-      }
-
-      // Prevent Ctrl+P / Cmd+P (Print to PDF)
-      if ((e.ctrlKey || e.metaKey) && e.key === 'p') {
-        e.preventDefault();
-      }
-
-      // Prevent Ctrl+S / Cmd+S (Save webpage)
-      if ((e.ctrlKey || e.metaKey) && e.key === 's') {
-        e.preventDefault();
-      }
-      
-      // Prevent F12 and Ctrl+Shift+I (DevTools)
-      if (e.key === 'F12' || ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'i')) {
-        e.preventDefault();
-      }
-    };
-
-    const handleContextMenu = (e) => {
-      // Prevent Right-Click
-      e.preventDefault();
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-    window.addEventListener('contextmenu', handleContextMenu);
-
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-      window.removeEventListener('contextmenu', handleContextMenu);
-    };
-  }, []);
-
   return (
     <Router>
       <Cursor />
