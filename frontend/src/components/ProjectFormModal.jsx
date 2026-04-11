@@ -1,14 +1,15 @@
 import { useState, useEffect } from 'react';
 import { createProject, updateProject, uploadImage, getImageUrl } from '../services/api';
-import { X, Upload } from 'lucide-react';
+import { X, Upload, Trash2 } from 'lucide-react';
 
 const ProjectFormModal = ({ project, onClose, onSuccess }) => {
-  const [file, setFile] = useState(null);
+  const [files, setFiles] = useState([]);
   const [formData, setFormData] = useState({
     title: '',
     description: '',
     techStack: '',
     image: '',
+    images: [],
     link: ''
   });
 
@@ -19,6 +20,7 @@ const ProjectFormModal = ({ project, onClose, onSuccess }) => {
         description: project.description,
         techStack: project.techStack.join(', '),
         image: project.image,
+        images: project.images || [],
         link: project.link
       });
     }
@@ -30,8 +32,15 @@ const ProjectFormModal = ({ project, onClose, onSuccess }) => {
 
   const handleFileChange = (e) => {
     if (e.target.files && e.target.files.length > 0) {
-      setFile(e.target.files[0]);
+      setFiles(Array.from(e.target.files));
     }
+  };
+
+  const removeImage = (index) => {
+    setFormData({
+      ...formData,
+      images: formData.images.filter((_, i) => i !== index)
+    });
   };
 
   const handleSubmit = async (e) => {
@@ -42,11 +51,19 @@ const ProjectFormModal = ({ project, onClose, onSuccess }) => {
     };
 
     try {
-      if (file) {
-        const uploadData = new FormData();
-        uploadData.append('image', file);
-        const { data: uploadedImagePath } = await uploadImage(uploadData);
-        submitData.image = uploadedImagePath; // Set new path
+      // Upload new files if any
+      if (files.length > 0) {
+        const uploadedPaths = [];
+        for (const file of files) {
+          const uploadFormData = new FormData();
+          uploadFormData.append('image', file);
+          const response = await uploadImage(uploadFormData);
+          uploadedPaths.push(response.data);
+        }
+        // Add newly uploaded paths to existing images
+        submitData.images = [...(formData.images || []), ...uploadedPaths];
+        // Set first image as thumbnail for backward compatibility
+        submitData.image = submitData.images[0];
       }
 
       if (project) {
@@ -104,34 +121,60 @@ const ProjectFormModal = ({ project, onClose, onSuccess }) => {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-slate-700 dark:text-text-muted mb-1 text-center transition-colors">Project Image</label>
-            <div className="flex flex-col items-center gap-3">
-              {(formData.image || file) && (
-                <img 
-                  src={file ? URL.createObjectURL(file) : getImageUrl(formData.image)} 
-                  alt="Preview" 
-                  className="w-full h-32 object-cover rounded-xl border border-slate-200 dark:border-white/10" 
-                />
+            <label className="block text-sm font-medium text-slate-700 dark:text-text-muted mb-1 text-center transition-colors">Project Images (Multiple)</label>
+            <div className="space-y-3">
+              {/* Display existing images */}
+              {formData.images && formData.images.length > 0 && (
+                <div className="grid grid-cols-3 gap-2">
+                  {formData.images.map((img, index) => (
+                    <div key={index} className="relative group">
+                      <img
+                        src={getImageUrl(img)}
+                        alt={`Preview ${index}`}
+                        className="w-full h-24 object-cover rounded-lg border border-slate-200 dark:border-white/10"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => removeImage(index)}
+                        className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center rounded-lg"
+                      >
+                        <Trash2 size={16} className="text-white" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
               )}
+
+              {/* Display new files to upload */}
+              {files.length > 0 && (
+                <div className="grid grid-cols-3 gap-2 p-3 bg-blue-50 dark:bg-blue-500/10 rounded-lg border border-blue-200 dark:border-blue-500/20">
+                  {files.map((file, index) => (
+                    <div key={index} className="relative">
+                      <img
+                        src={URL.createObjectURL(file)}
+                        alt={`New ${index}`}
+                        className="w-full h-24 object-cover rounded-lg border border-blue-200 dark:border-blue-500/30"
+                      />
+                      <div className="text-xs text-blue-700 dark:text-blue-300 text-center truncate mt-1">{file.name}</div>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* Upload button */}
               <div className="relative w-full">
                 <input
                   type="file"
                   accept="image/*"
+                  multiple
                   onChange={handleFileChange}
                   className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
                 />
                 <div className="w-full bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl px-4 py-2 text-slate-900 dark:text-white text-center flex items-center justify-center gap-2 hover:bg-slate-100 dark:hover:bg-white/10 transition-colors">
                   <Upload size={18} />
-                  <span>{file ? file.name : (formData.image ? 'Change Image' : 'Upload Image (Local)')}</span>
+                  <span>{files.length > 0 ? `${files.length} file(s) selected` : 'Upload Images (Multiple)'}</span>
                 </div>
               </div>
-              
-              {/* Optional: Fallback string representation if they want to clear it */}
-              {(formData.image && !file) && (
-                <div className="text-xs text-slate-500 text-center w-full truncate">
-                  Current path: {formData.image}
-                </div>
-              )}
             </div>
           </div>
           <div>

@@ -13,6 +13,11 @@ const projectSchema = new mongoose.Schema({
     type: [String],
     default: [],
   },
+  images: {
+    type: [String],
+    default: [],
+  },
+  // Deprecated: keeping for backward compatibility
   image: {
     type: String,
     default: '',

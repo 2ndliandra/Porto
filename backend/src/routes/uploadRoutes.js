@@ -50,4 +50,18 @@ router.post('/', upload.single('image'), (req, res) => {
   res.send(`/${req.file.path.replace(/\\/g, '/')}`);
 });
 
+// @desc    Upload multiple images
+// @route   POST /api/upload/multiple
+// @access  Public
+router.post('/multiple', upload.array('images', 10), (req, res) => {
+  // Check if files were uploaded
+  if (!req.files || req.files.length === 0) {
+    return res.status(400).send({ message: 'Please upload at least one file' });
+  }
+
+  // Return array of paths
+  const filePaths = req.files.map(file => `/${file.path.replace(/\\/g, '/')}`);
+  res.send(filePaths);
+});
+
 export default router;

@@ -33,12 +33,17 @@ export const getProjectById = async (req, res) => {
 // @access  Public (No auth for CRM)
 export const createProject = async (req, res) => {
   try {
-    const { title, description, techStack, image, link } = req.body;
+    const { title, description, techStack, image, images, link } = req.body;
+
+    // Support both single image and multiple images
+    const projectImages = images && Array.isArray(images) ? images : (image ? [image] : []);
+
     const project = new Project({
       title,
       description,
       techStack,
-      image,
+      images: projectImages,
+      image: image || (projectImages.length > 0 ? projectImages[0] : ''), // Backward compatibility
       link,
     });
     const createdProject = await project.save();
@@ -53,14 +58,26 @@ export const createProject = async (req, res) => {
 // @access  Public
 export const updateProject = async (req, res) => {
   try {
-    const { title, description, techStack, image, link } = req.body;
+    const { title, description, techStack, image, images, link } = req.body;
     const project = await Project.findById(req.params.id);
 
     if (project) {
       if (title !== undefined) project.title = title;
       if (description !== undefined) project.description = description;
       if (techStack !== undefined) project.techStack = techStack;
-      if (image !== undefined) project.image = image;
+
+      // Handle both single and multiple images
+      if (images !== undefined && Array.isArray(images)) {
+        project.images = images;
+        project.image = images.length > 0 ? images[0] : ''; // Set first image as thumbnail for backward compatibility
+      } else if (image !== undefined) {
+        project.image = image;
+        // Preserve existing images array or create new one with single image
+        if (project.images.length === 0) {
+          project.images = [image];
+        }
+      }
+
       if (link !== undefined) project.link = link;
 
       const updatedProject = await project.save();

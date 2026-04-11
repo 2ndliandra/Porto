@@ -3,6 +3,7 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 import { Code2, Globe, Mail, ExternalLink, Activity, Target, Zap, Clock, BookOpen, Building, GraduationCap, Laptop, Phone, MapPin, Compass } from 'lucide-react';
 import * as LucideIcons from 'lucide-react';
 import HeroSection from '../components/HeroSection';
+import ProjectCarousel from '../components/ProjectCarousel';
 import SkillCard from '../components/SkillCard';
 import { getProjects, getExperiences, getSkills, getSoftSkills, getAcademics, getOrganizations, getInternships, getContacts, getLearnings, getImageUrl } from '../services/api';
 
@@ -385,20 +386,15 @@ const Portfolio = () => {
           {Array.isArray(projects) && projects.length > 0 ? projects.map(project => (
             <motion.div variants={itemVariants} whileHover={{ y: -10 }} key={project._id} className="glass p-4 rounded-[2.5rem] glass-hover flex flex-col group border border-slate-200 hover:border-purple-300 dark:border-white/5 dark:hover:border-white/20 transition-all duration-500 shadow-xl hover:shadow-purple-500/10">
 
-              {/* Depth Layer 1: Nested Image Frame */}
-              <div className="relative h-64 w-full rounded-[2rem] overflow-hidden border border-slate-200 dark:border-white/10 shadow-[inset_0_0_20px_rgba(0,0,0,0.05)] dark:shadow-[inset_0_0_20px_rgba(0,0,0,0.5)]">
-                {/* Gradient Overlay for Depth */}
-                <div className="absolute inset-0 bg-gradient-to-t from-white via-white/80 dark:from-[#0b1120] dark:via-[#0b1120]/60 to-transparent z-10 opacity-90 group-hover:opacity-75 transition-opacity duration-500 rounded-[2rem]"></div>
+              {/* Project Carousel - Handles single or multiple images */}
+              <div className="relative group">
+                <ProjectCarousel
+                  images={project.images && project.images.length > 0 ? project.images : (project.image ? [project.image] : [])}
+                  title={project.title}
+                  autoSlideInterval={5000}
+                />
 
-                {project.image ? (
-                  <img src={getImageUrl(project.image)} alt={project.title} loading="lazy" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 relative z-0" />
-                ) : (
-                  <div className="w-full h-full bg-gradient-to-br from-slate-200 to-slate-100 dark:from-white/5 dark:to-white/10 flex items-center justify-center group-hover:from-purple-200 group-hover:to-indigo-200 dark:group-hover:from-purple-500/10 dark:group-hover:to-indigo-500/10 transition-colors duration-500 relative z-0 rounded-[2rem]">
-                    <Target size={48} className="text-slate-400 dark:text-white/20 group-hover:text-purple-500 dark:group-hover:text-purple-400/50 transition-colors duration-500" />
-                  </div>
-                )}
-
-                {/* Depth Layer 2: Overlapping Tech Stack Badges */}
+                {/* Tech Stack Badges */}
                 <div className="absolute bottom-5 left-5 right-5 z-20 flex flex-wrap gap-2">
                   {project.techStack.map(tech => (
                     <span key={tech} className="text-xs font-semibold px-3 py-1.5 backdrop-blur-md bg-white/70 dark:bg-white/10 hover:bg-white dark:hover:bg-white/20 text-slate-800 dark:text-white shadow-lg rounded-full border border-slate-200 dark:border-white/20 transition-colors cursor-default">
@@ -499,8 +495,8 @@ const Portfolio = () => {
                       <IconComponent size={24} />
                     </div>
                     <span className={`text-xs font-semibold px-3 py-1 rounded-full border ${learning.status === 'Completed' ? 'border-emerald-200 text-emerald-600 bg-emerald-50 dark:border-emerald-500/20 dark:text-emerald-400 dark:bg-emerald-500/10' :
-                        learning.status === 'In Progress' ? 'border-blue-200 text-blue-600 bg-blue-50 dark:border-blue-500/20 dark:text-blue-400 dark:bg-blue-500/10' :
-                          'border-purple-200 text-purple-600 bg-purple-50 dark:border-purple-500/20 dark:text-purple-400 dark:bg-purple-500/10'
+                      learning.status === 'In Progress' ? 'border-blue-200 text-blue-600 bg-blue-50 dark:border-blue-500/20 dark:text-blue-400 dark:bg-blue-500/10' :
+                        'border-purple-200 text-purple-600 bg-purple-50 dark:border-purple-500/20 dark:text-purple-400 dark:bg-purple-500/10'
                       }`}>
                       {learning.status}
                     </span>
