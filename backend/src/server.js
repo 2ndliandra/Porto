@@ -21,7 +21,9 @@ connectDB();
 const app = express();
 
 app.use(cors());
-app.use(express.json());
+// Increase body size limits for image uploads (50MB for JSON, 50MB for URL-encoded)
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
 app.use('/api/projects', projectRoutes);
 app.use('/api/experiences', experienceRoutes);
