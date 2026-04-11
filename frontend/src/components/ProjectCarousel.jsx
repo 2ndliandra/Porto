@@ -13,14 +13,14 @@ const ProjectCarousel = ({ images, title, autoSlideInterval = 5000 }) => {
 
     // Auto-slide effect
     useEffect(() => {
-        if (!isAutoPlay || imageList.length === 0) return;
+        if (!isAutoPlay || imageList.length <= 1) return;
 
         const interval = setInterval(() => {
             setCurrentIndex((prev) => (prev + 1) % imageList.length);
         }, autoSlideInterval);
 
         return () => clearInterval(interval);
-    }, [isAutoPlay, imageList.length, autoSlideInterval]);
+    }, [isAutoPlay, imageList, autoSlideInterval]);
 
     const goToPrevious = () => {
         setCurrentIndex((prev) => (prev - 1 + imageList.length) % imageList.length);
@@ -111,8 +111,8 @@ const ProjectCarousel = ({ images, title, autoSlideInterval = 5000 }) => {
                                     key={index}
                                     onClick={() => goToSlide(index)}
                                     className={`rounded-full transition-all duration-300 ${index === currentIndex
-                                            ? 'bg-white dark:bg-white/80 w-2 h-2'
-                                            : 'bg-white/50 dark:bg-white/30 w-1.5 h-1.5 hover:bg-white/70 dark:hover:bg-white/50'
+                                        ? 'bg-white dark:bg-white/80 w-2 h-2'
+                                        : 'bg-white/50 dark:bg-white/30 w-1.5 h-1.5 hover:bg-white/70 dark:hover:bg-white/50'
                                         }`}
                                     whileHover={{ scale: 1.2 }}
                                 />
