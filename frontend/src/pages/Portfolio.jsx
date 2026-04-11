@@ -118,17 +118,27 @@ const Portfolio = () => {
           <motion.div whileHover={{ scale: 1.02 }} transition={{ duration: 0.3 }} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={itemVariants} className="glass p-8 md:p-10 rounded-3xl glass-hover relative overflow-hidden group md:w-[55%] flex-shrink-0">
             <div className="absolute top-0 right-0 w-64 h-64 bg-fuchsia-300/30 dark:bg-fuchsia-500/10 rounded-full blur-[60px] dark:blur-[80px] group-hover:bg-fuchsia-300/50 dark:group-hover:bg-fuchsia-500/20 transition-all duration-700"></div>
             <div className="absolute bottom-0 left-0 w-64 h-64 bg-indigo-300/30 dark:bg-indigo-500/10 rounded-full blur-[60px] dark:blur-[80px] group-hover:bg-indigo-300/50 dark:group-hover:bg-indigo-500/20 transition-all duration-700"></div>
-            <p className="text-base md:text-lg leading-relaxed text-slate-700 dark:text-text-muted relative z-10 font-light transition-colors duration-500">
-              Mahasiswa <span className="text-blue-600 dark:text-blue-400 font-semibold transition-colors duration-500">Teknologi Informasi</span> yang memiliki ketertarikan tinggi pada pengembangan website, khususnya di bidang <span className="text-blue-600 dark:text-blue-400 font-semibold transition-colors duration-500">back-end development</span>, serta memiliki pengalaman di bidang <span className="text-blue-600 dark:text-blue-400 transition-colors duration-500">front-end</span>.
-              <br/><br/>
-              Berpengalaman menggunakan <span className="text-blue-600 dark:text-blue-400 transition-colors duration-500">PHP (Laravel)</span>, <span className="text-blue-600 dark:text-blue-400 transition-colors duration-500">MySQL</span>, serta version control system seperti <span className="text-blue-600 dark:text-blue-400 transition-colors duration-500">Git & GitHub</span>.
-              <br/><br/>
-              Selain itu, memiliki pengalaman dalam menggunakan <span className="text-blue-600 dark:text-blue-400 transition-colors duration-500">React TypeScript</span> dan <span className="text-blue-600 dark:text-blue-400 transition-colors duration-500">Tailwind CSS</span> untuk pengembangan antarmuka.
-              <br/><br/>
-              Terbiasa bekerja dalam <span className="text-blue-600 dark:text-blue-400 transition-colors duration-500">tim</span> melalui pengalaman organisasi dan program <span className="text-blue-600 dark:text-blue-400 transition-colors duration-500">Magang Berdampak</span>.
-              <br/><br/>
-              Memiliki <span className="text-blue-600 dark:text-blue-400 transition-colors duration-500">semangat tinggi untuk terus belajar</span>, mengembangkan kemampuan, serta mengikuti tren terbaru dalam perkembangan teknologi, khususnya di bidang <span className="text-blue-600 dark:text-blue-400 transition-colors duration-500">web development</span>.
-            </p>
+            <div className="relative z-10 max-w-xl space-y-6">
+              <p className="text-base md:text-lg leading-[1.8] text-slate-700 dark:text-white/75 font-light transition-colors duration-500">
+                Mahasiswa <span className="font-semibold dark:text-white">Teknologi Informasi</span> dengan ketertarikan tinggi pada pengembangan website, terutama dalam <span className="font-semibold dark:text-white">back-end development</span> dan pengalaman di <span className="font-semibold dark:text-white">front-end</span>.
+              </p>
+
+              <p className="text-base md:text-lg leading-[1.8] text-slate-700 dark:text-white/75 font-light transition-colors duration-500">
+                Berpengalaman menggunakan <span className="font-semibold dark:text-white">PHP (Laravel)</span>, <span className="font-semibold dark:text-white">MySQL</span>, dan version control system seperti <span className="font-semibold dark:text-white">Git & GitHub</span>.
+              </p>
+
+              <p className="text-base md:text-lg leading-[1.8] text-slate-700 dark:text-white/75 font-light transition-colors duration-500">
+                Memiliki expertise dalam <span className="font-semibold dark:text-white">React TypeScript</span> dan <span className="font-semibold dark:text-white">Tailwind CSS</span> untuk pengembangan interface yang modern dan responsif.
+              </p>
+
+              <p className="text-base md:text-lg leading-[1.8] text-slate-700 dark:text-white/75 font-light transition-colors duration-500">
+                Terbiasa bekerja dalam <span className="font-semibold dark:text-white">tim kolaboratif</span> melalui pengalaman organisasi dan program <span className="font-semibold dark:text-white">Magang Berdampak</span>.
+              </p>
+
+              <p className="text-base md:text-lg leading-[1.8] text-slate-700 dark:text-white/75 font-light transition-colors duration-500">
+                Memiliki <span className="font-semibold dark:text-white">passion untuk continuous learning</span> dan selalu mengikuti tren terbaru dalam teknologi web development.
+              </p>
+            </div>
           </motion.div>
 
           {/* Right Column: 3D Lanyard */}
@@ -141,7 +151,7 @@ const Portfolio = () => {
           >
             {/* Added a subtle overlay for depth */}
             <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.05),transparent_70%)] z-10"></div>
-            
+
             <Suspense fallback={
               <div className="w-full h-full flex items-center justify-center">
                 <div className="w-8 h-8 border-4 border-slate-300 dark:border-white/10 border-t-fuchsia-500 rounded-full animate-spin"></div>
@@ -310,7 +320,7 @@ const Portfolio = () => {
         </div>
         <motion.div variants={staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} className="grid grid-cols-2 md:grid-cols-4 gap-6">
           {Array.isArray(skills) && skills.length > 0 ? skills.map((skill) => (
-            <SkillCard 
+            <SkillCard
               key={skill._id}
               skill={skill}
               IconComponent={LucideIcons[skill.iconName] || LucideIcons.Code2}
@@ -342,7 +352,7 @@ const Portfolio = () => {
         </div>
         <motion.div variants={staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} className="grid grid-cols-2 md:grid-cols-4 gap-6">
           {Array.isArray(softSkills) && softSkills.length > 0 ? softSkills.map((skill) => (
-            <SkillCard 
+            <SkillCard
               key={skill._id}
               skill={skill}
               IconComponent={LucideIcons[skill.iconName] || LucideIcons.Users}
@@ -488,11 +498,10 @@ const Portfolio = () => {
                     <div className="w-12 h-12 bg-violet-100 dark:bg-violet-500/20 text-violet-600 dark:text-violet-400 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
                       <IconComponent size={24} />
                     </div>
-                    <span className={`text-xs font-semibold px-3 py-1 rounded-full border ${
-                      learning.status === 'Completed' ? 'border-emerald-200 text-emerald-600 bg-emerald-50 dark:border-emerald-500/20 dark:text-emerald-400 dark:bg-emerald-500/10' :
-                      learning.status === 'In Progress' ? 'border-blue-200 text-blue-600 bg-blue-50 dark:border-blue-500/20 dark:text-blue-400 dark:bg-blue-500/10' :
-                      'border-purple-200 text-purple-600 bg-purple-50 dark:border-purple-500/20 dark:text-purple-400 dark:bg-purple-500/10'
-                    }`}>
+                    <span className={`text-xs font-semibold px-3 py-1 rounded-full border ${learning.status === 'Completed' ? 'border-emerald-200 text-emerald-600 bg-emerald-50 dark:border-emerald-500/20 dark:text-emerald-400 dark:bg-emerald-500/10' :
+                        learning.status === 'In Progress' ? 'border-blue-200 text-blue-600 bg-blue-50 dark:border-blue-500/20 dark:text-blue-400 dark:bg-blue-500/10' :
+                          'border-purple-200 text-purple-600 bg-purple-50 dark:border-purple-500/20 dark:text-purple-400 dark:bg-purple-500/10'
+                      }`}>
                       {learning.status}
                     </span>
                   </div>
@@ -559,13 +568,13 @@ const Portfolio = () => {
                 )}
                 {contacts[0].instagram && (
                   <motion.a whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} href={contacts[0].instagram} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 bg-gradient-to-r from-purple-600 via-pink-500 to-orange-400 hover:from-purple-700 hover:via-pink-600 hover:to-orange-500 border border-pink-400/20 px-6 py-4 rounded-xl transition-all shadow-lg dark:shadow-xl">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-white"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-white"><rect width="20" height="20" x="2" y="2" rx="5" ry="5" /><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" /><line x1="17.5" x2="17.51" y1="6.5" y2="6.5" /></svg>
                     <span className="font-semibold text-white">{contacts[0].instagramUsername || 'Instagram'}</span>
                   </motion.a>
                 )}
                 {contacts[0].linkedin && (
                   <motion.a whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} href={contacts[0].linkedin} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 bg-[#0A66C2] hover:bg-[#004182] border border-blue-400/20 px-6 py-4 rounded-xl transition-colors shadow-lg dark:shadow-xl">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-white"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-white"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" /><rect width="4" height="12" x="2" y="9" /><circle cx="4" cy="4" r="2" /></svg>
                     <span className="font-semibold text-white">{contacts[0].linkedinUsername || 'LinkedIn'}</span>
                   </motion.a>
                 )}
