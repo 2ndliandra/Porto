@@ -60,9 +60,9 @@ const HeroSection = () => {
   };
 
   return (
-    <section id="home" className="min-h-screen w-full flex flex-col justify-center items-center text-center px-4 relative overflow-hidden transition-colors duration-500 bg-slate-50 dark:bg-[#070b14]" style={{ display: 'flex', position: 'relative', zIndex: 1 }}>
+    <section id="home" className="min-h-screen flex flex-col justify-center items-center text-center px-4 relative overflow-hidden transition-colors duration-500 bg-slate-50 dark:bg-[#070b14]">
       {/* Yin-Yang Mesh Gradient — Two halves rotating as one */}
-      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none" style={{ position: 'absolute', inset: 0, zIndex: 0 }}>
+      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
 
         {/* Rotating Container */}
         <motion.div
@@ -82,14 +82,14 @@ const HeroSection = () => {
         <div className="absolute bottom-[25%] right-[25%] w-[35%] h-[35%] rounded-full blur-[100px] bg-sky-300/25 dark:bg-sky-500/10"></div>
 
         {/* Overlay for text readability */}
-        <div className="absolute inset-0 bg-white/5 dark:bg-black/5 pointer-events-none"></div>
+        <div className="absolute inset-0 bg-white/20 dark:bg-black/30"></div>
       </div>
 
       <motion.div
         variants={containerVariants}
-        initial="visible"
+        initial="hidden"
         animate="visible"
-        className="relative z-20 max-w-4xl mx-auto flex flex-col items-center" style={{ position: 'relative', zIndex: 20 }}
+        className="relative z-10 max-w-4xl mx-auto flex flex-col items-center"
       >
 
         {/* Floating Badges */}
@@ -125,7 +125,7 @@ const HeroSection = () => {
         </motion.div>
 
         {/* Profile Avatar */}
-        <motion.div initial="visible" variants={itemVariants} className="relative mb-8 group cursor-pointer" onClick={handleAvatarClick}>
+        <motion.div variants={itemVariants} className="relative mb-8 group cursor-pointer" onClick={handleAvatarClick}>
           <div className="absolute inset-0 bg-blue-500 rounded-full blur-[20px] opacity-20 dark:opacity-40 group-hover:opacity-40 dark:group-hover:opacity-60 group-hover:scale-110 transition-all duration-500"></div>
           <img
             src={profileImg}
@@ -136,25 +136,25 @@ const HeroSection = () => {
         </motion.div>
 
         {/* Headline */}
-        <motion.div initial="visible" variants={itemVariants} className="space-y-4 mb-6 relative z-20" style={{ position: 'relative', zIndex: 20 }}>
-          <h2 className="text-xl md:text-2xl text-blue-600 dark:text-cyan-400 font-medium tracking-wide drop-shadow-[0_0_10px_rgba(34,211,238,0.2)] dark:drop-shadow-[0_0_10px_rgba(34,211,238,0.4)]" style={{ fontWeight: 'bold', fontSize: '1.5rem', color: '#2563eb' }}>Hi! I Am</h2>
-          <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight text-slate-900 dark:text-white mb-2 py-2 transition-colors duration-500" style={{ fontSize: '3rem', fontWeight: 'bold', color: '#000' }}>
-            Moch <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 via-indigo-500 to-fuchsia-500 dark:from-cyan-400 dark:via-indigo-400 dark:to-fuchsia-500 drop-shadow-[0_0_20px_rgba(168,85,247,0.4)] animate-gradient inline-block" style={{ color: '#2563eb' }}>Novaliandra</span>
+        <motion.div variants={itemVariants} className="space-y-4 mb-6 relative z-10">
+          <h2 className="text-xl md:text-2xl text-blue-600 dark:text-cyan-400 font-medium tracking-wide drop-shadow-[0_0_10px_rgba(34,211,238,0.2)] dark:drop-shadow-[0_0_10px_rgba(34,211,238,0.4)]">Hi! I Am</h2>
+          <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight text-slate-900 dark:text-white mb-2 py-2 transition-colors duration-500">
+            Moch <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 via-indigo-500 to-fuchsia-500 dark:from-cyan-400 dark:via-indigo-400 dark:to-fuchsia-500 drop-shadow-[0_0_20px_rgba(168,85,247,0.4)] animate-gradient inline-block">Novaliandra</span>
           </h1>
-          <p className="text-xl md:text-2xl font-light text-slate-700 dark:text-white/80 transition-colors duration-500" style={{ fontSize: '1.25rem', color: '#374151' }}>
-            Backend  Developer <span className="text-fuchsia-500 mx-2" style={{ color: '#d946ef' }}>|</span> Technology Enthusiast
+          <p className="text-xl md:text-2xl font-light text-slate-700 dark:text-white/80 transition-colors duration-500">
+            Backend  Developer <span className="text-fuchsia-500 mx-2">|</span> Technology Enthusiast
           </p>
         </motion.div>
 
         {/* Description */}
-        <motion.div initial="visible" variants={itemVariants} className="max-w-2xl mb-10">
+        <motion.div variants={itemVariants} className="max-w-2xl mb-10">
           <p className="text-lg text-slate-600 dark:text-text-muted leading-relaxed transition-colors duration-500">
             I build modern web applications and automation systems with clean, scalable, and sophisticated solutions. Let's turn complex problems into elegant digital experiences. This portofolio webisite is made with React.js, Tailwind CSS, Framer Motion and CRM features.
           </p>
         </motion.div>
 
         {/* CTA Button */}
-        <motion.div initial="visible" variants={itemVariants} className="mt-4">
+        <motion.div variants={itemVariants} className="mt-4">
           <a href="#projects" className="group relative inline-flex items-center justify-center">
             <div className="absolute -inset-1 bg-gradient-to-r from-fuchsia-500 via-purple-500 to-cyan-500 rounded-full blur opacity-40 dark:opacity-50 group-hover:opacity-80 dark:group-hover:opacity-100 transition duration-300 group-hover:scale-105"></div>
             <button className="relative bg-white dark:bg-[#0b1120] border border-slate-200 dark:border-white/10 text-slate-800 dark:text-white px-8 py-3.5 rounded-full font-semibold text-lg flex items-center gap-2 hover:bg-slate-50 dark:hover:bg-white/5 transition-all duration-300 shadow-xl overflow-hidden">
