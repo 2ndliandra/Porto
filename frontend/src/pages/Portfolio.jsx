@@ -383,44 +383,48 @@ const Portfolio = () => {
           </RevealText>
         </div>
         <motion.div variants={staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {Array.isArray(projects) && projects.length > 0 ? projects.map(project => (
-            <motion.div variants={itemVariants} whileHover={{ y: -10 }} key={project._id} className="glass p-4 rounded-[2.5rem] glass-hover flex flex-col group border border-slate-200 hover:border-purple-300 dark:border-white/5 dark:hover:border-white/20 transition-all duration-500 shadow-xl hover:shadow-purple-500/10">
+          {Array.isArray(projects) && projects.length > 0 ? projects.map((project, index) => {
+            // Calculate different slide time for each card (3.5s to 6s)
+            const slideTime = 3500 + (index % 5) * 500;
+            return (
+              <motion.div variants={itemVariants} whileHover={{ y: -10 }} key={project._id} className="glass p-4 rounded-[2.5rem] glass-hover flex flex-col group border border-slate-200 hover:border-purple-300 dark:border-white/5 dark:hover:border-white/20 transition-all duration-500 shadow-xl hover:shadow-purple-500/10">
 
-              {/* Project Carousel - Handles single or multiple images */}
-              <div className="relative group">
-                <ProjectCarousel
-                  images={project.images && project.images.length > 0 ? project.images : (project.image ? [project.image] : [])}
-                  title={project.title}
-                  autoSlideInterval={5000}
-                />
+                {/* Project Carousel - Handles single or multiple images */}
+                <div className="relative group">
+                  <ProjectCarousel
+                    images={project.images && project.images.length > 0 ? project.images : (project.image ? [project.image] : [])}
+                    title={project.title}
+                    autoSlideInterval={slideTime}
+                  />
 
-                {/* Tech Stack Badges */}
-                <div className="absolute bottom-5 left-5 right-5 z-20 flex flex-wrap gap-2">
-                  {project.techStack.map(tech => (
-                    <span key={tech} className="text-xs font-semibold px-3 py-1.5 backdrop-blur-md bg-white/70 dark:bg-white/10 hover:bg-white dark:hover:bg-white/20 text-slate-800 dark:text-white shadow-lg rounded-full border border-slate-200 dark:border-white/20 transition-colors cursor-default">
-                      {tech}
-                    </span>
-                  ))}
-                </div>
-              </div>
-
-              {/* Depth Layer 3: Content Section */}
-              <div className="px-4 py-8 flex flex-col flex-grow relative overflow-hidden">
-                <div className="absolute -top-10 right-0 w-32 h-32 bg-purple-300/30 dark:bg-purple-500/5 rounded-full blur-[30px] dark:blur-[40px] group-hover:bg-purple-300/50 dark:group-hover:bg-purple-500/15 transition-all duration-500 pointer-events-none"></div>
-
-                <h3 className="text-2xl font-bold mb-3 text-slate-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-300 transition-colors duration-500">{project.title}</h3>
-                <p className="text-slate-600 dark:text-text-muted mb-2 flex-grow leading-relaxed font-light transition-colors duration-500">{project.description}</p>
-
-                {project.link && (
-                  <div className="mt-8 pt-6 border-t border-slate-200 dark:border-white/5">
-                    <a href={project.link} target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 w-full py-3 px-4 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-white/5 dark:hover:bg-white/10 border border-slate-200 dark:border-white/5 hover:border-slate-300 dark:hover:border-white/10 text-sm font-bold text-slate-800 dark:text-white transition-all group/link">
-                      Launch Project <ExternalLink size={16} className="text-purple-600 dark:text-purple-400 group-hover/link:-translate-y-0.5 group-hover/link:translate-x-0.5 transition-transform" />
-                    </a>
+                  {/* Tech Stack Badges */}
+                  <div className="absolute bottom-5 left-5 right-5 z-20 flex flex-wrap gap-2">
+                    {project.techStack.map(tech => (
+                      <span key={tech} className="text-xs font-semibold px-3 py-1.5 backdrop-blur-md bg-white/70 dark:bg-white/10 hover:bg-white dark:hover:bg-white/20 text-slate-800 dark:text-white shadow-lg rounded-full border border-slate-200 dark:border-white/20 transition-colors cursor-default">
+                        {tech}
+                      </span>
+                    ))}
                   </div>
-                )}
-              </div>
-            </motion.div>
-          )) : (
+                </div>
+
+                {/* Depth Layer 3: Content Section */}
+                <div className="px-4 py-8 flex flex-col flex-grow relative overflow-hidden">
+                  <div className="absolute -top-10 right-0 w-32 h-32 bg-purple-300/30 dark:bg-purple-500/5 rounded-full blur-[30px] dark:blur-[40px] group-hover:bg-purple-300/50 dark:group-hover:bg-purple-500/15 transition-all duration-500 pointer-events-none"></div>
+
+                  <h3 className="text-2xl font-bold mb-3 text-slate-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-300 transition-colors duration-500">{project.title}</h3>
+                  <p className="text-slate-600 dark:text-text-muted mb-2 flex-grow leading-relaxed font-light transition-colors duration-500">{project.description}</p>
+
+                  {project.link && (
+                    <div className="mt-8 pt-6 border-t border-slate-200 dark:border-white/5">
+                      <a href={project.link} target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 w-full py-3 px-4 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-white/5 dark:hover:bg-white/10 border border-slate-200 dark:border-white/5 hover:border-slate-300 dark:hover:border-white/10 text-sm font-bold text-slate-800 dark:text-white transition-all group/link">
+                        Launch Project <ExternalLink size={16} className="text-purple-600 dark:text-purple-400 group-hover/link:-translate-y-0.5 group-hover/link:translate-x-0.5 transition-transform" />
+                      </a>
+                    </div>
+                  )}
+                </div>
+              </motion.div>
+            );
+          }) : (
             <p className="text-slate-500 dark:text-text-muted col-span-2 text-center py-10">No projects added yet. Go to Admin panel to create some!</p>
           )}
         </motion.div>

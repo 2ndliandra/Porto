@@ -150,7 +150,7 @@ const HeroSection = () => {
         {/* Description */}
         <motion.div variants={itemVariants} className="max-w-2xl mb-10">
           <p className="text-lg text-slate-600 dark:text-text-muted leading-relaxed transition-colors duration-500">
-            I build modern web applications and automation systems with clean, scalable, and sophisticated solutions. Let's turn complex problems into elegant digital experiences. This portofolio webisite is made with React.js, Tailwind CSS, Framer Motion and CRM features.
+            I build modern web applications and automation systems with clean, scalable, and sophisticated solutions. Let's turn complex problems into elegant digital experiences. This portofolio webisite is made with React.js, Tailwind CSS, Framer Motion and CMS features.
           </p>
         </motion.div>
 
