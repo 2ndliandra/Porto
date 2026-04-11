@@ -8,6 +8,7 @@ export default defineConfig({
     tailwindcss(),
     react()
   ],
+  assetsInclude: ['**/*.glb'],
   server: {
     proxy: {
       '/api': {

@@ -33,12 +33,12 @@ export const getExperienceById = async (req, res) => {
 // @access  Public (No auth for CRM)
 export const createExperience = async (req, res) => {
   try {
-    const { role, company, year, desc } = req.body;
+    const { role, company, year, description } = req.body;
     const experience = new Experience({
       role,
       company,
       year,
-      desc,
+      description,
     });
     const createdExperience = await experience.save();
     res.status(201).json(createdExperience);
@@ -52,14 +52,14 @@ export const createExperience = async (req, res) => {
 // @access  Public
 export const updateExperience = async (req, res) => {
   try {
-    const { role, company, year, desc } = req.body;
+    const { role, company, year, description } = req.body;
     const experience = await Experience.findById(req.params.id);
 
     if (experience) {
       if (role !== undefined) experience.role = role;
       if (company !== undefined) experience.company = company;
       if (year !== undefined) experience.year = year;
-      if (desc !== undefined) experience.desc = desc;
+      if (description !== undefined) experience.description = description;
 
       const updatedExperience = await experience.save();
       res.json(updatedExperience);

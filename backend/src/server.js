@@ -23,16 +23,16 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.use('/projects', projectRoutes);
-app.use('/experiences', experienceRoutes);
-app.use('/skills', skillRoutes);
-app.use('/softskills', softSkillRoutes);
-app.use('/academics', academicRoutes);
-app.use('/organizations', organizationRoutes);
-app.use('/internships', internshipRoutes);
-app.use('/contacts', contactRoutes);
-app.use('/learnings', learningRoutes);
-app.use('/upload', uploadRoutes);
+app.use('/api/projects', projectRoutes);
+app.use('/api/experiences', experienceRoutes);
+app.use('/api/skills', skillRoutes);
+app.use('/api/softskills', softSkillRoutes);
+app.use('/api/academics', academicRoutes);
+app.use('/api/organizations', organizationRoutes);
+app.use('/api/internships', internshipRoutes);
+app.use('/api/contacts', contactRoutes);
+app.use('/api/learnings', learningRoutes);
+app.use('/api/upload', uploadRoutes);
 
 const __dirname = path.resolve();
 app.use('/uploads', express.static(path.join(__dirname, '/uploads')));

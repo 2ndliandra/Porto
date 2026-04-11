@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useRef } from 'react';
 import profileImg from '../assets/profile.jpeg';
 
-const FloatingBadge = ({ text, delay = 0, yOffset = [0, -10, 0], top, left, right, bottom }) => {
+const FloatingBadge = ({ text, delay = 0, yOffset = [0, -50, 0], top, left, right, bottom }) => {
   return (
     <motion.div
       className="absolute bg-white/80 dark:bg-white/10 px-4 py-2 rounded-full text-xs font-semibold text-blue-700 dark:text-cyan-300 border border-blue-200 dark:border-white/10 shadow-lg dark:shadow-none z-20 pointer-events-none hidden md:block backdrop-blur-md transition-colors duration-500"
@@ -60,23 +60,30 @@ const HeroSection = () => {
   };
 
   return (
-    <section id="home" className="min-h-screen flex flex-col justify-center items-center text-center px-4 relative overflow-hidden bg-gradient-to-b from-slate-50 via-slate-100 to-slate-200 dark:from-secondary dark:via-secondary dark:to-[#070b14] transition-colors duration-500">
-      {/* Background Glows */}
-      <motion.div
-        animate={{ scale: [1, 1.2, 1], opacity: [0.5, 0.8, 0.5] }}
-        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-fuchsia-300/30 dark:bg-fuchsia-600/10 rounded-full blur-[100px] dark:blur-[150px] pointer-events-none transition-all duration-500"
-      ></motion.div>
-      <motion.div
-        animate={{ x: [0, 50, 0], y: [0, 40, 0] }}
-        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-        className="absolute top-0 right-1/4 w-[400px] h-[400px] bg-cyan-300/30 dark:bg-cyan-500/10 rounded-full blur-[80px] dark:blur-[120px] pointer-events-none transition-all duration-500"
-      ></motion.div>
-      <motion.div
-        animate={{ x: [0, -60, 0], y: [0, -30, 0], scale: [1, 1.1, 1] }}
-        transition={{ duration: 12, repeat: Infinity, ease: "easeInOut", delay: 2 }}
-        className="absolute bottom-1/4 left-1/4 w-[600px] h-[600px] bg-violet-300/30 dark:bg-violet-600/10 rounded-full blur-[100px] dark:blur-[150px] pointer-events-none transition-all duration-500"
-      ></motion.div>
+    <section id="home" className="min-h-screen flex flex-col justify-center items-center text-center px-4 relative overflow-hidden transition-colors duration-500 bg-slate-50 dark:bg-[#070b14]">
+      {/* Yin-Yang Mesh Gradient — Two halves rotating as one */}
+      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+
+        {/* Rotating Container */}
+        <motion.div
+          animate={{ rotate: 360 }}
+          transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
+          className="absolute inset-[-30%] w-[160%] h-[160%]"
+        >
+          {/* Yang — Blue half */}
+          <div className="absolute top-[10%] left-[10%] w-[55%] h-[55%] rounded-full blur-[120px] bg-blue-400/50 dark:bg-blue-500/25"></div>
+
+          {/* Yin — Green half */}
+          <div className="absolute bottom-[10%] right-[10%] w-[55%] h-[55%] rounded-full blur-[120px] bg-emerald-400/50 dark:bg-emerald-500/25"></div>
+        </motion.div>
+
+        {/* Static accent blobs for depth */}
+        <div className="absolute top-[20%] left-[30%] w-[40%] h-[40%] rounded-full blur-[100px] bg-teal-300/30 dark:bg-teal-500/15"></div>
+        <div className="absolute bottom-[25%] right-[25%] w-[35%] h-[35%] rounded-full blur-[100px] bg-sky-300/25 dark:bg-sky-500/10"></div>
+
+        {/* Overlay for text readability */}
+        <div className="absolute inset-0 bg-white/20 dark:bg-black/30"></div>
+      </div>
 
       <motion.div
         variants={containerVariants}
@@ -123,6 +130,7 @@ const HeroSection = () => {
           <img
             src={profileImg}
             alt="Moch Novaliandra"
+            loading="lazy"
             className="w-32 h-32 md:w-40 md:h-40 rounded-full object-cover border-4 border-white dark:border-white/5 relative z-10 shadow-2xl transition-transform duration-500 group-hover:scale-105"
           />
         </motion.div>

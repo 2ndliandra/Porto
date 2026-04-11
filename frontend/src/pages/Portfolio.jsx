@@ -1,9 +1,10 @@
-import { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
+import { useEffect, useState, useRef } from 'react';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import { Code2, Globe, Mail, ExternalLink, Activity, Target, Zap, Clock, BookOpen, Building, GraduationCap, Laptop, Phone, MapPin, Compass } from 'lucide-react';
 import * as LucideIcons from 'lucide-react';
 import HeroSection from '../components/HeroSection';
 import SkillCard from '../components/SkillCard';
+import Lanyard from '../components/Lanyard/Lanyard';
 import { getProjects, getExperiences, getSkills, getSoftSkills, getAcademics, getOrganizations, getInternships, getContacts, getLearnings, getImageUrl } from '../services/api';
 
 const Portfolio = () => {
@@ -47,11 +48,6 @@ const Portfolio = () => {
     fetchData();
   }, []);
 
-  const sectionVariants = {
-    hidden: { opacity: 0, y: 50 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } }
-  };
-
   const staggerContainer = {
     hidden: { opacity: 0 },
     visible: { opacity: 1, transition: { staggerChildren: 0.15 } }
@@ -62,56 +58,115 @@ const Portfolio = () => {
     visible: { opacity: 1, y: 0, transition: { duration: 0.5 } }
   };
 
+  // Cinematic Focus Wrapper component
+  const CinematicSection = ({ children, id, className = "" }) => {
+    const ref = useRef(null);
+    const { scrollYProgress } = useScroll({
+      target: ref,
+      offset: ["start end", "end start"]
+    });
+
+    const scale = useTransform(scrollYProgress, [0, 0.15, 0.85, 1], [0.95, 1, 1, 0.95]);
+    const opacity = useTransform(scrollYProgress, [0, 0.15, 0.85, 1], [0, 1, 1, 0]);
+
+    return (
+      <motion.section
+        id={id}
+        ref={ref}
+        style={{ scale, opacity }}
+        className={`py-24 px-4 max-w-5xl mx-auto relative ${className}`}
+      >
+        {children}
+      </motion.section>
+    );
+  };
+
+  // Ambrose-style Text Reveal
+  const RevealText = ({ children, className = "" }) => {
+    return (
+      <div className="overflow-hidden">
+        <motion.div
+          initial={{ y: "100%" }}
+          whileInView={{ y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+          className={className}
+        >
+          {children}
+        </motion.div>
+      </div>
+    );
+  };
+
   return (
     <div className="animate-fade-in">
       {/* Hero Section */}
       <HeroSection />
 
       {/* About Section */}
-      <motion.section id="about" initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={sectionVariants} className="py-24 px-4 max-w-5xl mx-auto">
-        <h2 className="text-3xl font-bold mb-8 flex items-center gap-4 text-slate-900 dark:text-white transition-colors duration-500">
-          <span className="w-10 h-1 bg-gradient-to-r from-fuchsia-500 to-purple-500 rounded-full"></span>
-          <LucideIcons.User className="text-fuchsia-500" />
-          About Me
-        </h2>
-        <motion.div whileHover={{ scale: 1.02 }} transition={{ duration: 0.3 }} className="glass p-10 rounded-3xl glass-hover relative overflow-hidden group">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-fuchsia-300/30 dark:bg-fuchsia-500/10 rounded-full blur-[60px] dark:blur-[80px] group-hover:bg-fuchsia-300/50 dark:group-hover:bg-fuchsia-500/20 transition-all duration-700"></div>
-          <div className="absolute bottom-0 left-0 w-64 h-64 bg-indigo-300/30 dark:bg-indigo-500/10 rounded-full blur-[60px] dark:blur-[80px] group-hover:bg-indigo-300/50 dark:group-hover:bg-indigo-500/20 transition-all duration-700"></div>
-          <p className="text-lg md:text-xl leading-relaxed text-slate-700 dark:text-text-muted relative z-10 font-light transition-colors duration-500">
-            Mahasiswa <span className="text-blue-600 dark:text-blue-400 font-semibold transition-colors duration-500">Teknologi Informasi</span> yang memiliki ketertarikan tinggi pada pengembangan website, khususnya di bidang <span className="text-blue-600 dark:text-blue-400 font-semibold transition-colors duration-500">back-end development</span>, serta memiliki pengalaman di bidang <span className="text-blue-600 dark:text-blue-400 transition-colors duration-500">front-end</span>.
+      <CinematicSection id="about">
+        <RevealText>
+          <h2 className="text-3xl font-bold mb-8 flex items-center gap-4 text-slate-900 dark:text-white transition-colors duration-500">
+            <span className="w-10 h-1 bg-gradient-to-r from-fuchsia-500 to-purple-500 rounded-full"></span>
+            <LucideIcons.User className="text-fuchsia-500" />
+            About Me
+          </h2>
+        </RevealText>
+        <div className="flex flex-col md:flex-row gap-8 items-stretch">
+          {/* Left Column: About Me Text Card */}
+          <motion.div whileHover={{ scale: 1.02 }} transition={{ duration: 0.3 }} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={itemVariants} className="glass p-8 md:p-10 rounded-3xl glass-hover relative overflow-hidden group md:w-[55%] flex-shrink-0">
+            <div className="absolute top-0 right-0 w-64 h-64 bg-fuchsia-300/30 dark:bg-fuchsia-500/10 rounded-full blur-[60px] dark:blur-[80px] group-hover:bg-fuchsia-300/50 dark:group-hover:bg-fuchsia-500/20 transition-all duration-700"></div>
+            <div className="absolute bottom-0 left-0 w-64 h-64 bg-indigo-300/30 dark:bg-indigo-500/10 rounded-full blur-[60px] dark:blur-[80px] group-hover:bg-indigo-300/50 dark:group-hover:bg-indigo-500/20 transition-all duration-700"></div>
+            <p className="text-base md:text-lg leading-relaxed text-slate-700 dark:text-text-muted relative z-10 font-light transition-colors duration-500">
+              Mahasiswa <span className="text-blue-600 dark:text-blue-400 font-semibold transition-colors duration-500">Teknologi Informasi</span> yang memiliki ketertarikan tinggi pada pengembangan website, khususnya di bidang <span className="text-blue-600 dark:text-blue-400 font-semibold transition-colors duration-500">back-end development</span>, serta memiliki pengalaman di bidang <span className="text-blue-600 dark:text-blue-400 transition-colors duration-500">front-end</span>.
+              <br/><br/>
+              Berpengalaman menggunakan <span className="text-blue-600 dark:text-blue-400 transition-colors duration-500">PHP (Laravel)</span>, <span className="text-blue-600 dark:text-blue-400 transition-colors duration-500">MySQL</span>, serta version control system seperti <span className="text-blue-600 dark:text-blue-400 transition-colors duration-500">Git & GitHub</span>.
+              <br/><br/>
+              Selain itu, memiliki pengalaman dalam menggunakan <span className="text-blue-600 dark:text-blue-400 transition-colors duration-500">React TypeScript</span> dan <span className="text-blue-600 dark:text-blue-400 transition-colors duration-500">Tailwind CSS</span> untuk pengembangan antarmuka.
+              <br/><br/>
+              Terbiasa bekerja dalam <span className="text-blue-600 dark:text-blue-400 transition-colors duration-500">tim</span> melalui pengalaman organisasi dan program <span className="text-blue-600 dark:text-blue-400 transition-colors duration-500">Magang Berdampak</span>.
+              <br/><br/>
+              Memiliki <span className="text-blue-600 dark:text-blue-400 transition-colors duration-500">semangat tinggi untuk terus belajar</span>, mengembangkan kemampuan, serta mengikuti tren terbaru dalam perkembangan teknologi, khususnya di bidang <span className="text-blue-600 dark:text-blue-400 transition-colors duration-500">web development</span>.
+            </p>
+          </motion.div>
 
-            Berpengalaman menggunakan <span className="text-blue-600 dark:text-blue-400 transition-colors duration-500">PHP (Laravel)</span>, <span className="text-blue-600 dark:text-blue-400 transition-colors duration-500">MySQL</span>, serta version control system seperti <span className="text-blue-600 dark:text-blue-400 transition-colors duration-500">Git & GitHub</span>.
-
-            Selain itu, memiliki pengalaman dalam menggunakan <span className="text-blue-600 dark:text-blue-400 transition-colors duration-500">React TypeScript</span> dan <span className="text-blue-600 dark:text-blue-400 transition-colors duration-500">Tailwind CSS</span> untuk pengembangan antarmuka.
-
-            Terbiasa bekerja dalam <span className="text-blue-600 dark:text-blue-400 transition-colors duration-500">tim</span> melalui pengalaman organisasi dan program <span className="text-blue-600 dark:text-blue-400 transition-colors duration-500">Magang Berdampak</span>.
-
-            Memiliki <span className="text-blue-600 dark:text-blue-400 transition-colors duration-500">semangat tinggi untuk terus belajar</span>, mengembangkan kemampuan, serta mengikuti tren terbaru dalam perkembangan teknologi, khususnya di bidang <span className="text-blue-600 dark:text-blue-400 transition-colors duration-500">web development</span>.
-          </p>
-        </motion.div>
-      </motion.section>
+          {/* Right Column: 3D Lanyard */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 1, ease: "easeOut" }}
+            className="md:w-[45%] h-[500px] md:h-[650px] rounded-[3rem] overflow-hidden relative flex justify-center items-center bg-gradient-to-b from-slate-500/5 to-transparent dark:from-white/5 dark:to-transparent border border-white/10 shadow-2xl"
+          >
+            <Lanyard position={[0, 0, 12]} gravity={[0, -40, 0]} fov={18} transparent={true} />
+            {/* Added a subtle overlay for depth */}
+            <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.05),transparent_70%)]"></div>
+          </motion.div>
+        </div>
+      </CinematicSection>
 
       {/* Academic Career Section */}
-      <motion.section id="academic" initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={sectionVariants} className="pb-24 pt-4 px-4 max-w-5xl mx-auto relative">
+      <CinematicSection id="academic">
         <div className="absolute right-0 top-1/3 w-96 h-96 bg-emerald-300/20 dark:bg-emerald-500/5 rounded-full blur-[80px] dark:blur-[100px] pointer-events-none transition-all duration-500"></div>
         <div className="mb-12 relative z-10">
-          <h2 className="text-3xl font-bold mb-4 flex items-center gap-4 text-slate-900 dark:text-white transition-colors duration-500">
-            <span className="w-10 h-1 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-full"></span>
-            <LucideIcons.GraduationCap className="text-emerald-500" />
-            Academic Career
-          </h2>
-          <p className="text-slate-700 dark:text-text-muted text-lg font-light max-w-2xl transition-colors duration-500">
-            My formal education background and academic journey that built the foundation for my technical expertise.
-          </p>
+          <RevealText>
+            <h2 className="text-3xl font-bold mb-4 flex items-center gap-4 text-slate-900 dark:text-white transition-colors duration-500">
+              <span className="w-10 h-1 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-full"></span>
+              <LucideIcons.GraduationCap className="text-emerald-500" />
+              Academic Career
+            </h2>
+          </RevealText>
+          <RevealText>
+            <p className="text-slate-700 dark:text-text-muted text-lg font-light max-w-2xl transition-colors duration-500">
+              My formal education background and academic journey that built the foundation for my technical expertise.
+            </p>
+          </RevealText>
         </div>
-        <div className="relative z-10 space-y-6">
+        <motion.div variants={staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} className="relative z-10 space-y-6">
           {Array.isArray(academics) && academics.length > 0 ? academics.map((academic, index) => (
             <motion.div
               key={academic._id}
               variants={itemVariants}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
               whileHover={{ x: 8 }}
               className="glass p-6 rounded-2xl glass-hover group relative overflow-hidden border border-slate-200 dark:border-white/5 hover:border-emerald-300 dark:hover:border-emerald-500/30 transition-all duration-500"
             >
@@ -133,30 +188,31 @@ const Portfolio = () => {
           )) : (
             <p className="text-slate-500 dark:text-text-muted text-center py-6 relative z-10">No academic records found. Add them in the Admin panel!</p>
           )}
-        </div>
-      </motion.section>
+        </motion.div>
+      </CinematicSection>
 
       {/* Internship Experience Section */}
-      <motion.section id="internships" initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={sectionVariants} className="pb-24 pt-4 px-4 max-w-5xl mx-auto relative">
+      <CinematicSection id="internships">
         <div className="absolute right-0 top-1/3 w-96 h-96 bg-sky-300/20 dark:bg-sky-500/5 rounded-full blur-[80px] dark:blur-[100px] pointer-events-none transition-all duration-500"></div>
         <div className="mb-12 relative z-10">
-          <h2 className="text-3xl font-bold mb-4 flex items-center gap-4 text-slate-900 dark:text-white transition-colors duration-500">
-            <span className="w-10 h-1 bg-gradient-to-r from-sky-500 to-blue-500 rounded-full"></span>
-            <LucideIcons.Laptop className="text-sky-500" />
-            Internship Experience
-          </h2>
-          <p className="text-slate-700 dark:text-text-muted text-lg font-light max-w-2xl transition-colors duration-500">
-            Hands-on professional experience gained through structured internship programs, bridging academic knowledge with real-world industry practice.
-          </p>
+          <RevealText>
+            <h2 className="text-3xl font-bold mb-4 flex items-center gap-4 text-slate-900 dark:text-white transition-colors duration-500">
+              <span className="w-10 h-1 bg-gradient-to-r from-sky-500 to-blue-500 rounded-full"></span>
+              <LucideIcons.Laptop className="text-sky-500" />
+              Internship Experience
+            </h2>
+          </RevealText>
+          <RevealText>
+            <p className="text-slate-700 dark:text-text-muted text-lg font-light max-w-2xl transition-colors duration-500">
+              Hands-on professional experience gained through structured internship programs, bridging academic knowledge with real-world industry practice.
+            </p>
+          </RevealText>
         </div>
-        <div className="relative z-10 space-y-6">
+        <motion.div variants={staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} className="relative z-10 space-y-6">
           {Array.isArray(internships) && internships.length > 0 ? internships.map((internship) => (
             <motion.div
               key={internship._id}
               variants={itemVariants}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
               whileHover={{ x: 8 }}
               className="glass p-6 rounded-2xl glass-hover group relative overflow-hidden border border-slate-200 dark:border-white/5 hover:border-sky-300 dark:hover:border-sky-500/30 transition-all duration-500"
             >
@@ -178,30 +234,31 @@ const Portfolio = () => {
           )) : (
             <p className="text-slate-500 dark:text-text-muted text-center py-6 relative z-10">No internships found. Add them in the Admin panel!</p>
           )}
-        </div>
-      </motion.section>
+        </motion.div>
+      </CinematicSection>
 
       {/* Organizational Experience Section */}
-      <motion.section id="organizations" initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={sectionVariants} className="pb-24 pt-4 px-4 max-w-5xl mx-auto relative">
+      <CinematicSection id="organizations">
         <div className="absolute left-0 top-1/3 w-96 h-96 bg-rose-300/20 dark:bg-rose-500/5 rounded-full blur-[80px] dark:blur-[100px] pointer-events-none transition-all duration-500"></div>
         <div className="mb-12 relative z-10">
-          <h2 className="text-3xl font-bold mb-4 flex items-center gap-4 text-slate-900 dark:text-white transition-colors duration-500">
-            <span className="w-10 h-1 bg-gradient-to-r from-rose-500 to-pink-500 rounded-full"></span>
-            <LucideIcons.Building className="text-rose-500" />
-            Organizational Experience
-          </h2>
-          <p className="text-slate-700 dark:text-text-muted text-lg font-light max-w-2xl transition-colors duration-500">
-            My involvement in various organizations that developed critical leadership, teamwork, and communication skills.
-          </p>
+          <RevealText>
+            <h2 className="text-3xl font-bold mb-4 flex items-center gap-4 text-slate-900 dark:text-white transition-colors duration-500">
+              <span className="w-10 h-1 bg-gradient-to-r from-rose-500 to-pink-500 rounded-full"></span>
+              <LucideIcons.Building className="text-rose-500" />
+              Organizational Experience
+            </h2>
+          </RevealText>
+          <RevealText>
+            <p className="text-slate-700 dark:text-text-muted text-lg font-light max-w-2xl transition-colors duration-500">
+              My involvement in various organizations that developed critical leadership, teamwork, and communication skills.
+            </p>
+          </RevealText>
         </div>
-        <div className="relative z-10 space-y-6">
+        <motion.div variants={staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} className="relative z-10 space-y-6">
           {Array.isArray(organizations) && organizations.length > 0 ? organizations.map((org) => (
             <motion.div
               key={org._id}
               variants={itemVariants}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
               whileHover={{ x: 8 }}
               className="glass p-6 rounded-2xl glass-hover group relative overflow-hidden border border-slate-200 dark:border-white/5 hover:border-rose-300 dark:hover:border-rose-500/30 transition-all duration-500"
             >
@@ -223,21 +280,25 @@ const Portfolio = () => {
           )) : (
             <p className="text-slate-500 dark:text-text-muted text-center py-6 relative z-10">No organizations found. Add them in the Admin panel!</p>
           )}
-        </div>
-      </motion.section>
+        </motion.div>
+      </CinematicSection>
 
       {/* Skills Section */}
-      <motion.section id="skills" initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={sectionVariants} className="py-24 px-4 max-w-5xl mx-auto relative cursor-glow-wrapper">
+      <CinematicSection id="skills" className="cursor-glow-wrapper">
         <div className="absolute right-0 top-1/4 w-96 h-96 bg-cyan-300/20 dark:bg-cyan-500/5 rounded-full blur-[80px] dark:blur-[100px] pointer-events-none transition-all duration-500"></div>
         <div className="mb-12 relative z-10">
-          <h2 className="text-3xl font-bold mb-4 flex items-center gap-4 text-slate-900 dark:text-white transition-colors duration-500">
-            <span className="w-10 h-1 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full"></span>
-            <LucideIcons.Zap className="text-cyan-500" />
-            Skills & Technologies
-          </h2>
-          <p className="text-slate-700 dark:text-text-muted text-lg font-light max-w-2xl transition-colors duration-500">
-            A comprehensive overview of my technical proficiencies and the tools I utilize to engineer scalable solutions.
-          </p>
+          <RevealText>
+            <h2 className="text-3xl font-bold mb-4 flex items-center gap-4 text-slate-900 dark:text-white transition-colors duration-500">
+              <span className="w-10 h-1 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full"></span>
+              <LucideIcons.Zap className="text-cyan-500" />
+              Skills & Technologies
+            </h2>
+          </RevealText>
+          <RevealText>
+            <p className="text-slate-700 dark:text-text-muted text-lg font-light max-w-2xl transition-colors duration-500">
+              A comprehensive overview of my technical proficiencies and the tools I utilize to engineer scalable solutions.
+            </p>
+          </RevealText>
         </div>
         <motion.div variants={staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} className="grid grid-cols-2 md:grid-cols-4 gap-6">
           {Array.isArray(skills) && skills.length > 0 ? skills.map((skill) => (
@@ -252,20 +313,24 @@ const Portfolio = () => {
             <p className="text-slate-500 dark:text-text-muted col-span-4 text-center py-6 w-full relative z-10">No skills found. Add them in the Admin panel!</p>
           )}
         </motion.div>
-      </motion.section>
+      </CinematicSection>
 
       {/* Soft Skills Section */}
-      <motion.section id="soft-skills" initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={sectionVariants} className="pb-24 pt-4 px-4 max-w-5xl mx-auto relative cursor-glow-wrapper">
+      <CinematicSection id="soft-skills" className="cursor-glow-wrapper">
         <div className="absolute left-0 top-1/4 w-96 h-96 bg-amber-300/20 dark:bg-amber-500/5 rounded-full blur-[80px] dark:blur-[100px] pointer-events-none transition-all duration-500"></div>
         <div className="mb-12 relative z-10">
-          <h2 className="text-3xl font-bold mb-4 flex items-center gap-4 text-slate-900 dark:text-white transition-colors duration-500">
-            <span className="w-10 h-1 bg-gradient-to-r from-amber-500 to-rose-500 rounded-full"></span>
-            <LucideIcons.Users className="text-amber-500" />
-            Soft Skills & Leadership
-          </h2>
-          <p className="text-slate-700 dark:text-text-muted text-lg font-light max-w-2xl transition-colors duration-500">
-            Key interpersonal strengths and leadership qualities that ensure effective collaboration and smooth project delivery.
-          </p>
+          <RevealText>
+            <h2 className="text-3xl font-bold mb-4 flex items-center gap-4 text-slate-900 dark:text-white transition-colors duration-500">
+              <span className="w-10 h-1 bg-gradient-to-r from-amber-500 to-rose-500 rounded-full"></span>
+              <LucideIcons.Users className="text-amber-500" />
+              Soft Skills & Leadership
+            </h2>
+          </RevealText>
+          <RevealText>
+            <p className="text-slate-700 dark:text-text-muted text-lg font-light max-w-2xl transition-colors duration-500">
+              Key interpersonal strengths and leadership qualities that ensure effective collaboration and smooth project delivery.
+            </p>
+          </RevealText>
         </div>
         <motion.div variants={staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} className="grid grid-cols-2 md:grid-cols-4 gap-6">
           {Array.isArray(softSkills) && softSkills.length > 0 ? softSkills.map((skill) => (
@@ -280,19 +345,23 @@ const Portfolio = () => {
             <p className="text-slate-500 dark:text-text-muted col-span-4 text-center py-6 w-full relative z-10">No soft skills found. Add them in the Admin panel!</p>
           )}
         </motion.div>
-      </motion.section>
+      </CinematicSection>
 
       {/* Projects Section */}
-      <motion.section id="projects" initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={sectionVariants} className="py-24 px-4 max-w-5xl mx-auto">
+      <CinematicSection id="projects">
         <div className="mb-12">
-          <h2 className="text-3xl font-bold mb-4 flex items-center gap-4 text-slate-900 dark:text-white transition-colors duration-500">
-            <span className="w-10 h-1 bg-gradient-to-r from-purple-500 to-indigo-500 rounded-full"></span>
-            <LucideIcons.LayoutGrid className="text-purple-500" />
-            Featured Projects
-          </h2>
-          <p className="text-slate-700 dark:text-text-muted text-lg font-light max-w-2xl transition-colors duration-500">
-            A curated selection of my professional work, highlighting complex problem-solving and full-stack development implementations.
-          </p>
+          <RevealText>
+            <h2 className="text-3xl font-bold mb-4 flex items-center gap-4 text-slate-900 dark:text-white transition-colors duration-500">
+              <span className="w-10 h-1 bg-gradient-to-r from-purple-500 to-indigo-500 rounded-full"></span>
+              <LucideIcons.LayoutGrid className="text-purple-500" />
+              Featured Projects
+            </h2>
+          </RevealText>
+          <RevealText>
+            <p className="text-slate-700 dark:text-text-muted text-lg font-light max-w-2xl transition-colors duration-500">
+              A curated selection of my professional work, highlighting complex problem-solving and full-stack development implementations.
+            </p>
+          </RevealText>
         </div>
         <motion.div variants={staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {Array.isArray(projects) && projects.length > 0 ? projects.map(project => (
@@ -304,7 +373,7 @@ const Portfolio = () => {
                 <div className="absolute inset-0 bg-gradient-to-t from-white via-white/80 dark:from-[#0b1120] dark:via-[#0b1120]/60 to-transparent z-10 opacity-90 group-hover:opacity-75 transition-opacity duration-500 rounded-[2rem]"></div>
 
                 {project.image ? (
-                  <img src={getImageUrl(project.image)} alt={project.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 relative z-0" />
+                  <img src={getImageUrl(project.image)} alt={project.title} loading="lazy" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 relative z-0" />
                 ) : (
                   <div className="w-full h-full bg-gradient-to-br from-slate-200 to-slate-100 dark:from-white/5 dark:to-white/10 flex items-center justify-center group-hover:from-purple-200 group-hover:to-indigo-200 dark:group-hover:from-purple-500/10 dark:group-hover:to-indigo-500/10 transition-colors duration-500 relative z-0 rounded-[2rem]">
                     <Target size={48} className="text-slate-400 dark:text-white/20 group-hover:text-purple-500 dark:group-hover:text-purple-400/50 transition-colors duration-500" />
@@ -341,20 +410,24 @@ const Portfolio = () => {
             <p className="text-slate-500 dark:text-text-muted col-span-2 text-center py-10">No projects added yet. Go to Admin panel to create some!</p>
           )}
         </motion.div>
-      </motion.section>
+      </CinematicSection>
 
       {/* Experience Section */}
-      <motion.section id="experience" initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={sectionVariants} className="py-24 px-4 max-w-3xl mx-auto relative cursor-glow-wrapper">
+      <CinematicSection id="experience" className="cursor-glow-wrapper max-w-3xl">
         <div className="absolute left-0 bottom-1/4 w-96 h-96 bg-indigo-300/20 dark:bg-indigo-500/5 rounded-full blur-[80px] dark:blur-[100px] pointer-events-none transition-all duration-500"></div>
         <div className="mb-16 relative z-10">
-          <h2 className="text-3xl font-bold mb-4 flex items-center gap-4 text-slate-900 dark:text-white transition-colors duration-500">
-            <span className="w-10 h-1 bg-gradient-to-r from-indigo-500 to-fuchsia-500 rounded-full"></span>
-            <LucideIcons.Briefcase className="text-indigo-500" />
-            Professional Experience
-          </h2>
-          <p className="text-slate-700 dark:text-text-muted text-lg font-light max-w-2xl transition-colors duration-500">
-            A demonstrated history of contributions across various roles, driving technical excellence and successful product deliveries.
-          </p>
+          <RevealText>
+            <h2 className="text-3xl font-bold mb-4 flex items-center gap-4 text-slate-900 dark:text-white transition-colors duration-500">
+              <span className="w-10 h-1 bg-gradient-to-r from-indigo-500 to-fuchsia-500 rounded-full"></span>
+              <LucideIcons.Briefcase className="text-indigo-500" />
+              Professional Experience
+            </h2>
+          </RevealText>
+          <RevealText>
+            <p className="text-slate-700 dark:text-text-muted text-lg font-light max-w-2xl transition-colors duration-500">
+              A demonstrated history of contributions across various roles, driving technical excellence and successful product deliveries.
+            </p>
+          </RevealText>
         </div>
         <motion.div variants={staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} className="space-y-12 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-1 before:bg-gradient-to-b before:from-transparent before:via-purple-500/30 before:to-transparent z-10">
           {Array.isArray(experiences) && experiences.length > 0 ? experiences.map((exp, index) => (
@@ -370,26 +443,30 @@ const Portfolio = () => {
                   <time className="font-caveat text-lg text-fuchsia-600 dark:text-fuchsia-400/90 whitespace-nowrap">{exp.year}</time>
                 </div>
                 <div className="text-sm font-semibold text-slate-500 dark:text-white/50 mb-4 tracking-wider uppercase relative z-10 transition-colors">{exp.company}</div>
-                <div className="text-slate-600 dark:text-text-muted leading-relaxed relative z-10 transition-colors">{exp.desc}</div>
+                <div className="text-slate-600 dark:text-text-muted leading-relaxed relative z-10 transition-colors">{exp.description || exp.desc}</div>
               </div>
             </motion.div>
           )) : (
             <p className="text-slate-500 dark:text-text-muted text-center py-10 w-full relative z-10">No experience records found. Go to Admin panel to create some!</p>
           )}
         </motion.div>
-      </motion.section>
+      </CinematicSection>
 
       {/* Currently Learning Section */}
-      <motion.section id="learning" initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={sectionVariants} className="py-24 px-4 max-w-5xl mx-auto relative">
+      <CinematicSection id="learning">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-lg h-96 bg-violet-300/20 dark:bg-violet-500/5 rounded-full blur-[100px] pointer-events-none"></div>
         <div className="text-center mb-16 relative z-10">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4 flex justify-center items-center gap-4 text-slate-900 dark:text-white transition-colors duration-500">
-            <Compass className="text-violet-500 dark:text-violet-400" size={32} />
-            Exploring & Learning
-          </h2>
-          <p className="text-slate-700 dark:text-text-muted text-lg font-light max-w-2xl mx-auto transition-colors duration-500">
-            Constantly expanding my horizons. Here's what I'm currently focused on studying and exploring.
-          </p>
+          <RevealText>
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 flex justify-center items-center gap-4 text-slate-900 dark:text-white transition-colors duration-500">
+              <Compass className="text-violet-500 dark:text-violet-400" size={32} />
+              Exploring & Learning
+            </h2>
+          </RevealText>
+          <RevealText>
+            <p className="text-slate-700 dark:text-text-muted text-lg font-light max-w-2xl mx-auto transition-colors duration-500">
+              Constantly expanding my horizons. Here's what I'm currently focused on studying and exploring.
+            </p>
+          </RevealText>
         </div>
 
         <motion.div variants={staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 relative z-10">
@@ -426,22 +503,26 @@ const Portfolio = () => {
             <p className="text-slate-500 dark:text-text-muted text-center py-10 col-span-full">No active learning topics right now. Adding some soon!</p>
           )}
         </motion.div>
-      </motion.section>
+      </CinematicSection>
 
       {/* Contact Section */}
-      <motion.section id="contact" initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={sectionVariants} className="py-24 px-4 max-w-5xl mx-auto mb-20">
+      <CinematicSection id="contact" className="mb-20">
         <motion.div whileHover={{ scale: 1.01 }} transition={{ duration: 0.3 }} className="glass p-12 md:p-16 rounded-[2.5rem] text-center relative overflow-hidden border border-slate-200 dark:border-white/5">
           <div className="absolute top-0 right-0 w-80 h-80 bg-fuchsia-300/30 dark:bg-fuchsia-500/10 rounded-full blur-[60px] dark:blur-[80px]"></div>
           <div className="absolute bottom-0 left-0 w-80 h-80 bg-cyan-300/30 dark:bg-cyan-500/10 rounded-full blur-[60px] dark:blur-[80px]"></div>
 
-          <h2 className="text-4xl md:text-5xl font-bold mb-6 flex justify-center items-center gap-4 relative z-10 text-slate-900 dark:text-white tracking-tight transition-colors duration-500">
-            <LucideIcons.Mail className="text-fuchsia-500" size={36} />
-            Let's Work Together
-          </h2>
-          <p className="text-lg text-slate-600 dark:text-text-muted max-w-xl mx-auto mb-10 relative z-10 font-light transition-colors duration-500">
-            I'm currently looking for new opportunities. Whether you have a question or just want to say hi, I'll try my best to get back to you!
-          </p>
-          <div className="flex flex-wrap justify-center gap-4 relative z-10">
+          <RevealText>
+            <h2 className="text-4xl md:text-5xl font-bold mb-6 flex justify-center items-center gap-4 relative z-10 text-slate-900 dark:text-white tracking-tight transition-colors duration-500">
+              <LucideIcons.Mail className="text-fuchsia-500" size={36} />
+              Let's Work Together
+            </h2>
+          </RevealText>
+          <RevealText>
+            <p className="text-lg text-slate-600 dark:text-text-muted max-w-xl mx-auto mb-10 relative z-10 font-light transition-colors duration-500">
+              I'm currently looking for new opportunities. Whether you have a question or just want to say hi, I'll try my best to get back to you!
+            </p>
+          </RevealText>
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="flex flex-wrap justify-center gap-4 relative z-10">
             {Array.isArray(contacts) && contacts.length > 0 ? (
               <>
                 {contacts[0].email && (
@@ -493,9 +574,9 @@ const Portfolio = () => {
                 </motion.a>
               </>
             )}
-          </div>
+          </motion.div>
         </motion.div>
-      </motion.section>
+      </CinematicSection>
     </div>
   );
 };
