@@ -88,7 +88,8 @@ const HeroSection = () => {
       <motion.div
         variants={containerVariants}
         initial="hidden"
-        animate="visible"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.1 }}
         className="relative z-10 max-w-4xl mx-auto flex flex-col items-center"
       >
 

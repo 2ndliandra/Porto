@@ -4,8 +4,9 @@ import { Code2, Globe, Mail, ExternalLink, Activity, Target, Zap, Clock, BookOpe
 import * as LucideIcons from 'lucide-react';
 import HeroSection from '../components/HeroSection';
 import SkillCard from '../components/SkillCard';
-import Lanyard from '../components/Lanyard/Lanyard';
 import { getProjects, getExperiences, getSkills, getSoftSkills, getAcademics, getOrganizations, getInternships, getContacts, getLearnings, getImageUrl } from '../services/api';
+
+const Lanyard = React.lazy(() => import('../components/Lanyard/Lanyard'));
 
 const Portfolio = () => {
   const [projects, setProjects] = useState([]);
@@ -138,9 +139,16 @@ const Portfolio = () => {
             transition={{ duration: 1, ease: "easeOut" }}
             className="md:w-[45%] h-[500px] md:h-[650px] rounded-[3rem] overflow-hidden relative flex justify-center items-center bg-gradient-to-b from-slate-500/5 to-transparent dark:from-white/5 dark:to-transparent border border-white/10 shadow-2xl"
           >
-            <Lanyard position={[0, 0, 12]} gravity={[0, -40, 0]} fov={18} transparent={true} />
             {/* Added a subtle overlay for depth */}
-            <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.05),transparent_70%)]"></div>
+            <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.05),transparent_70%)] z-10"></div>
+            
+            <Suspense fallback={
+              <div className="w-full h-full flex items-center justify-center">
+                <div className="w-8 h-8 border-4 border-slate-300 dark:border-white/10 border-t-fuchsia-500 rounded-full animate-spin"></div>
+              </div>
+            }>
+              <Lanyard position={[0, 0, 12]} gravity={[0, -40, 0]} fov={18} transparent={true} />
+            </Suspense>
           </motion.div>
         </div>
       </CinematicSection>
