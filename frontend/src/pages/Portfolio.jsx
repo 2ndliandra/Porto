@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, Suspense, lazy } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { Code2, Globe, Mail, ExternalLink, Activity, Target, Zap, Clock, BookOpen, Building, GraduationCap, Laptop, Phone, MapPin, Compass } from 'lucide-react';
 import * as LucideIcons from 'lucide-react';
@@ -6,7 +6,7 @@ import HeroSection from '../components/HeroSection';
 import SkillCard from '../components/SkillCard';
 import { getProjects, getExperiences, getSkills, getSoftSkills, getAcademics, getOrganizations, getInternships, getContacts, getLearnings, getImageUrl } from '../services/api';
 
-const Lanyard = React.lazy(() => import('../components/Lanyard/Lanyard'));
+const Lanyard = lazy(() => import('../components/Lanyard/Lanyard'));
 
 const Portfolio = () => {
   const [projects, setProjects] = useState([]);
